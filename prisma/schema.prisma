@@ -1,0 +1,31 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Contact {
+  id         String      @id @default(uuid())
+  name       String
+  email      String
+  telephones Telephone[]
+  img        String
+  isFavorite Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Telephone {
+  id Int @id @default(autoincrement())
+
+  type      String
+  number    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Contact   Contact? @relation(fields: [contactId], references: [id])
+  contactId String?
+}
